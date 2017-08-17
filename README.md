@@ -1,2 +1,4 @@
-# visorminutas
-Visor web de visualización del servicio de mapas WMS  de las Minutas Cartográficas mantenido por el Instituto Geográfico Nacional
+# Visor minutas cartográficas del IGN (España)
+Visor web de visualización del servicio de mapas WMS  de las Minutas Cartográficas mantenido por el Instituto Geográfico Nacional.
+
+Más información en esta [entrada de SIGdeletras](blog/espana-finisecular-visor-de-consulta-minutas-cartograficas-del-ign/)
