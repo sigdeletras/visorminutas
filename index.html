@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="initial-scale=1,user-scalable=no,maximum-scale=1,width=device-width">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="author" content="Patricio Soriano :: SIGdeletras">
+  <meta name="description" content="Visor Geográfico de las Minutas Cartográficas del IGN">
+  <meta name="keywords" content="Minutas XIX España Leaflet WMS IGN Patricio Soriano SIGdeletras">
+  
+  <title>SIGdeletras :: España Finisecular</title>
+
+  <link rel="stylesheet" href="css/bootstrap.css">
+  <link rel="stylesheet" href="css/leaflet.css">
+  <link rel="stylesheet" href="css/font-awesome.min.css">
+
+  <link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/themes/smoothness/jquery-ui.min.css" rel="stylesheet" type="text/css"/>
+
+  <link rel="stylesheet" href="css/leaflet.groupedlayercontrol.min.css">
+  <link rel="stylesheet" href="css/Control.Geocoder.css">
+  <link rel="stylesheet" href="css/leaflet-measure.css">
+
+  <link rel="stylesheet" href="app.css">
+  
+
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  
+  <script>var string = document.URL</script>
+
+</head>
+<body>
+ <nav class="navbar navbar-inverse navbar-fixed-top">
+
+  <div class="container-fluid">
+      <div class="navbar-header">
+        <div class="navbar-icon-container">
+          <a href="#" class="navbar-icon pull-right visible-xs" id="nav-btn"><i class="fa fa-bars fa-lg white"></i></a>
+
+        </div>
+        <a class="navbar-brand" href="#">España Finisecular</a>
+      </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+<!--         <li><a href="#" data-toggle="collapse" data-target=".navbar-collapse.in" id="full-extent"><i class="fa fa-arrows-alt"></i>&nbsp;&nbsp;Zum inicio</a></li> -->
+        <li><a href="#" data-toggle="collapse" data-target=".navbar-collapse.in" id="ayuda"><i class="fa fa-question-circle white"></i>&nbsp;&nbsp;Información</a></li>
+        <li><a href="#" data-toggle="collapse" data-target=".navbar-collapse.in" id="embebed-btn"><i class="fa fa-map-marker white"></i>&nbsp;&nbsp;Obtener mapa</a></li> 
+        <li><div class="checkbox navbar-btn" > <label class="navbar-link" > <input type="checkbox"  value="false"> Consultar datos de Minutas </label></div></li>
+        <li><a href="https://twitter.com/intent/tweet?text=Visor%20minutas%20cartogr%C3%A1ficas&hashtags=espa%C3%B1afinisecular,&url=http://visorminutas.sigdeletras.com/&via=sigdeletras" target="_blank" > <i class="fa fa-twitter white"></i>&nbsp;&nbsp;Twittear</i></a></li> 
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- container -->
+<div id="container">
+  <!-- lateral -->
+
+  <div id="map">
+    <div id="basemapslidercontainer">
+      <div id="basemapslider">
+      </div>
+    </div>
+  </div>
+
+</div>
+
+
+<!-- ./Modal Sobre -->
+  <div class="modal fade" id="ayudaModal" tabindex="-1" role="dialog">
+    <!-- <div class="modal-dialog"> -->
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          
+          <h3 class="modal-title">Información</h3>
+        </div>
+        <div class="modal-body">
+        <p><b>España Finisecular</b> es un visor web de consulta del servicio de visualización de mapas de las <a href="http://blog-idee.blogspot.com.es/2015/09/servicio-de-mapas-de-minutas.html" target="_blank">Minutas Cartográficas</a> mantenido por el Instituto Geográfico Nacional e incluido en la <a href="http://idee.es/" target="_blank">IDE de España</a>.</p>
+        <p>Más información en la entrada de <a href="http://www.sigdeletras.com/2016/espana-finisecular-visor-de-consulta-minutas-cartograficas-del-ign" target="_blank">SIGdeletras</a>.</p>
+        <p>Funciones principales:</p>
+        <p><ul>
+          <li>Consulta visual de la información de las minutas cartográficas.</li>
+          <li>Comparación mediante transparencia de la capa de minutas con otros servicios de mapas y ortofotografías.</li>
+          <li>Consulta de la fecha de la minuta.</li>
+          <li>Acceso a la <a href="http://centrodedescargas.cnig.es/CentroDescargas/" target="_blank">Centro de Descargas del CNIG</a> para la descarga del archivo georreferenciado.</li>
+          <li>Búsqueda por nombres geográficos.</li>
+          <li>Captura de coordenadas, distancias y áreas.</li>
+          <li>Obtener código HTML para añadir el visor en otras páginas web.</li>
+        </ul></p>
+        
+        <p><i>Desarrollado por <a href="http://www.sigdeletras.com/" target="_blank">Patricio Soriano</a> utilizando <a href="http://getbootstrap.com/" target="_blank">Bootstrap 3</a>, <a href="http://leafletjs.com/" target="_blank">Leaflet</a> y distintas <a href="http://leafletjs.com/plugins.html" target="_blank"> extensiones</a>. Diseño basado en la plantilla <a href="http://bmcbride.github.io/bootleaf/" target="_blank">Bootleaf</a>.</i></p>
+        
+          
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+        </div>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+  </div><!-- /.modal Ayuda-->
+
+
+  <div class="modal fade" id="featureModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button class="close" type="button" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <h4 class="modal-title text-primary" id="feature-title"></h4>
+        </div>
+        <div class="modal-body" id="feature-info"></div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+        </div>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+  </div><!-- /.modal -->
+
+<!-- ./Modal Embebed -->
+<div class="modal fade" id="embebedModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h3 class="modal-title">Obtener mapa</h3>
+      </div>
+      <div class="modal-body">
+       <!-- <h2>Insertar mapa</h2> -->
+       <form role="form">
+        <div class="form-group">
+          <label for="email">Copiar el siguiente código HTML e insértalo en tu página web:</label>
+          <textarea id="urliframe"class="form-control" rows="3"></textarea>
+
+          <script>
+          document.getElementById("urliframe").innerHTML = "<iframe width='425' height='350' frameborder='0' scrolling='no' marginheight='0' marginwidth='0' src='"+document.URL+"' style='border: 1px solid black'></iframe><br/><small><a href='"+document.URL+"'>Ver mapa más grande</a></small>";
+          </script>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal embebed-->
+
+  <!-- jquery, bootstrap y leaflet -->
+
+    <!--<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+    <script src="assets/js/dist/js/jquery-1.11.1.min.js"></script>
+  -->
+  <script src="js/libs/jquery.min.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>
+
+  <!--<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>-->
+  <script src="js/libs/bootstrap.js"></script>
+
+  <!--<script src="//cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>-->
+  <script src="js/libs/leaflet.js"></script>
+
+  <!-- groupedlayercontrol -->
+  <script src="js/libs/leaflet.groupedlayercontrol.min.js"></script>
+
+  <!-- hash -->
+  <script src="js/libs/leaflet-hash.js"></script>
+
+  <!-- Geocoder -->
+  <script src="js/libs/Control.Geocoder.js"></script>
+
+  <!-- measurecontrol -->
+  <script src="js/libs/leaflet-measure.js"></script>
+   
+
+  <script src="appmap.js"></script>
+
+</body>
+</html>
+s
