@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Ategua</title>
+	
+		<meta charset="utf-8" />
+		<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.css" />
+		<link rel="stylesheet" type="text/css" href="css/own_style.css">
+		<link rel="stylesheet" href="css/label.css" />
+		<script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+		<script src="http://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.js"></script>
+		<script src="js/leaflet-hash.js"></script>
+		<script src="js/label.js"></script>
+		<script src="js/Autolinker.min.js"></script>
+		<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+	</head>
+	<body>
+		<div id="map"></div>
+		<script src="data/exp_vertice.js"></script>
+		<script src="data/exp_delimitacion.js"></script>
+		<script>
+		var map = L.map('map', {
+			zoomControl:true, maxZoom:19
+		}).fitBounds([[37.7497818391,-4.58150603285],[37.7589124425,-4.56781430317]]);
+		var hash = new L.Hash(map);
+		var additional_attrib = ' Creado por <a href="https://www.sigdeletras.com" target ="_blank">SIGdeletras </a>';
+		var feature_group = new L.featureGroup([]);
+		var raster_group = new L.LayerGroup([]);
+
+		var basemap_0 = L.tileLayer.wms('http://www.ign.es/wms-inspire/pnoa-ma', {
+			layers: 'OI.OrthoimageCoverage',
+			format: 'image/png',
+			transparent: true,
+			continuousWorld : true,
+			attribution: '<a href="http://pnoa.ign.es/" title="Ortofoto del PNOA">PNOA IGN </a>|' +additional_attrib
+		}).addTo(map);
+
+		
+		var layerOrder=new Array();
+
+		function pop_delimitacion(feature, layer) {					
+			var popupContent = '<h3>Delimitación del  ' + feature.properties.entorno + '</h3>Perímetro (m): ' + feature.properties.perimetro + '<br>Área (m2): ' + feature.properties.area;
+			layer.bindPopup(popupContent);
+		}
+
+		function doStyledelimitacion(feature) {
+			switch (feature.properties.entorno) {
+				case 'BIC':
+					return {
+						color: '#e22b25',
+						weight: '4.3',
+						dashArray: '',
+						opacity: '1.0',
+					};
+					break;
+				case 'ENTORNO':
+					return {
+						color: '#33a02c',
+						weight: '4.3',
+						dashArray: '10,5',
+						opacity: '1.0',
+					};
+					break;
+			}
+		}
+		var exp_delimitacionJSON = new L.geoJson(exp_delimitacion,{
+			onEachFeature: pop_delimitacion,
+			style: doStyledelimitacion
+		});
+		//add comment sign to hide this layer on the map in the initial view.
+		feature_group.addLayer(exp_delimitacionJSON);
+		function pop_vertice(feature, layer) {					
+			var popupContent = '<table><tr><th scope="row">Entidad</th><td>' + Autolinker.link(String(feature.properties['entidad'])) + '</td></tr><tr><th scope="row">Nº de orden</th><td>' + Autolinker.link(String(feature.properties['norden'])) + '</td></tr><tr><th scope="row">Coordenada X</th><td>' + Autolinker.link(String(feature.properties['x'])) + '</td></tr><tr><th scope="row">Coordenada Y</th><td>' + Autolinker.link(String(feature.properties['y'])) + '</td></tr></table>';
+			layer.bindPopup(popupContent);
+		}
+
+		var exp_verticeJSON = new L.geoJson(exp_vertice,{
+			onEachFeature: pop_vertice,
+			pointToLayer: function (feature, latlng) {  
+				return L.circleMarker(latlng, {
+					radius: 5.2,
+					fillColor: '#ff7f00',
+					color: '#ffffff',
+					weight: 1,
+					opacity: 1.0,
+					fillOpacity: 1.0
+				})
+			}
+		});
+		//add comment sign to hide this layer on the map in the initial view.
+		feature_group.addLayer(exp_verticeJSON);
+
+		feature_group.addTo(map);
+	var baseMaps = {
+		'<a href="http://pnoa.ign.es/" title="Ortofoto del PNOA">Ortofotografía 2013</a>': basemap_0
+	};
+		L.control.layers(baseMaps,{"Vértices": exp_verticeJSON,"Delimitación": exp_delimitacionJSON},{collapsed:false}).addTo(map);
+		L.control.scale({options: {position: 'bottomleft',maxWidth: 100,metric: true,imperial: false,updateWhenIdle: false}}).addTo(map);
+	</script>
+</body>
+</html>
